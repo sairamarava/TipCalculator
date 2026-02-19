@@ -1,0 +1,241 @@
+/* ================
+   Tip Calculator UI
+   - Left: white panel with labeled pills
+   - Right: two-tone magenta/plum with big totals
+   - Result text boxes shown on the right (within cards)
+   ================ */
+
+:root{
+  /* Color system tuned to the reference */
+  --bg: #f5f2f6;          /* page background */
+  --left-bg: #ffffff;     /* left panel */
+  --right-top: #b52b73;   /* magenta (top half) */
+  --right-bottom: #66113f;/* plum (bottom half) */
+  --ring: #e7bfd6;        /* pill outline */
+  --accent: #cf5a96;      /* pill text/buttons */
+  --text: #4b2c3c;        /* base text */
+  --text-soft: #8f6a7d;   /* labels */
+  --white: #fff;
+
+  --radius-xl: 22px;
+  --radius-pill: 999px;
+
+  --shadow-soft: 0 10px 30px rgba(0,0,0,.06);
+}
+
+*{ box-sizing: border-box; }
+
+html, body{
+  height: 100%;
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Poppins", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+}
+
+.visually-hidden{
+  position:absolute !important;
+  height:1px; width:1px;
+  overflow:hidden; clip:rect(1px,1px,1px,1px);
+  white-space:nowrap;
+  clip-path: inset(50%);
+  border:0; padding:0; margin:-1px;
+}
+
+/* ======= App layout (two columns with hard split) ======= */
+.app{
+  max-width: 1100px;
+  margin: clamp(14px, 3vw, 28px) auto;
+  background:
+    linear-gradient(90deg, var(--left-bg) 0 43%, transparent 43% 57%),
+    linear-gradient(180deg, var(--right-top) 0 50%, var(--right-bottom) 50% 100%);
+  border-radius: var(--radius-xl);
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  min-height: 600px;
+  overflow: hidden;
+  box-shadow: var(--shadow-soft);
+}
+
+.panel{
+  padding: clamp(20px, 4vw, 36px);
+}
+
+.panel--left{
+  display: grid;
+  align-content: start;
+  gap: clamp(18px, 3.5vw, 28px);
+}
+
+.panel--right{
+  color: var(--white);
+  display: grid;
+}
+
+/* ======= Left fields ======= */
+.block .label{
+  margin: 0 0 10px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  letter-spacing: 0.18em;
+  color: var(--text-soft);
+}
+
+.pill{
+  background: #fff;
+  border: 2px solid var(--ring);
+  border-radius: var(--radius-pill);
+  padding: 10px 12px;
+  display: grid;
+  grid-template-columns: 40px 1fr 40px;
+  align-items: center;
+  gap: 8px;
+}
+.pill--wide{
+  grid-template-columns: 24px 1fr;
+  padding: 16px 18px;
+}
+
+.prefix{
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 1.25rem;
+}
+
+.pill__value{
+  font-weight: 700;
+  font-size: 1.6rem;
+  color: var(--accent);
+  outline: none;
+  border: none;
+  background: transparent;
+  width: 100%;
+  text-align: right;
+}
+
+.pill__value--center{ text-align:center; }
+
+.pill input::placeholder{ color: #c7a9b8; }
+
+.muted{
+  color: #d19ab6;
+  margin-top: 6px;
+  display: inline-block;
+  font-weight: 600;
+}
+
+/* Service rating select (styled to match pill text) */
+.rating-wrap{
+  display:flex; justify-content:center; align-items:center; gap:10px;
+}
+.rating-select{
+  appearance:none;
+  background:transparent;
+  border:none;
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 1.1rem;
+  outline:none;
+}
+.tip-hint{ margin-left: 2px; }
+
+/* CTA button */
+.btn{
+  background: #f8e9f1;
+  color: var(--accent);
+  border: 2px solid var(--ring);
+  border-radius: var(--radius-pill);
+  font-weight: 800;
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+  height: 46px;
+  display: grid;
+  place-items:center;
+  transition: transform .05s ease, background .2s ease, opacity .2s ease;
+}
+.btn:hover{ background:#f3dbeb; }
+.btn:active{ transform: translateY(1px) scale(.98); }
+.btn:disabled{ opacity:.55; cursor:not-allowed; }
+
+/* ======= Right: Results cards ======= */
+.right-grid{
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  gap: 0;
+  height: 100%;
+}
+
+.card{
+  padding: clamp(22px, 3.6vw, 36px);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: start;
+  gap: 10px 20px;
+}
+
+.card--light{ background: transparent; }
+.card--dark{
+  background: rgba(0,0,0,.12);
+  backdrop-filter: saturate(110%);
+}
+
+.card__header .title{
+  margin: 0;
+  font-size: clamp(1.1rem, 2.2vw, 1.3rem);
+  letter-spacing: .35em;
+  font-weight: 800;
+}
+
+.subtitle{
+  display:block; margin-top:6px;
+  color:#f0cfe1; font-size:.85rem; letter-spacing:.06em;
+}
+
+.amount{
+  margin-left:auto;
+  font-weight: 800;
+  font-size: clamp(2rem, 5.5vw, 3rem);
+  text-align: right;
+}
+
+.helper{
+  grid-column: 1 / -1;
+  margin: 12px 0 8px;
+  color: #f3d5e5;
+  line-height: 1.5;
+  max-width: 60ch;
+}
+
+/* Result rows (text boxes on right) */
+.result-row{
+  grid-column: 1 / -1;
+  margin-top: 10px;
+}
+.result-label{
+  display:block;
+  font-size:.8rem;
+  letter-spacing:.16em;
+  color:#ffd8ea;
+  margin: 6px 0 8px;
+}
+.result-pill{
+  max-width: 360px;
+}
+
+/* ======= Responsive ======= */
+@media (max-width: 900px){
+  .app{
+    grid-template-columns: 1fr;
+    background:
+      linear-gradient(180deg, var(--left-bg) 0 48%, transparent 48% 52%),
+      linear-gradient(180deg, var(--right-top) 52% 76%, var(--right-bottom) 76% 100%);
+  }
+  .right-grid{ min-height: 420px; }
+  .panel--left{ gap: 16px; }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce){
+  *{ transition: none !important; }
+}

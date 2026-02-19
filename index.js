@@ -61,9 +61,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Update UI
     tipPerPersonEl.textContent = formatCurrency(tipPerPerson);
-    tipAmountEl.value = totalTip.toFixed(2);
+    tipAmountEl.value = Math.floor(totalTip);
     totalPerPersonEl.textContent = formatCurrency(totalPerPerson);
-    shareAmountEl.value = totalPerPerson.toFixed(2);
+    shareAmountEl.value = Math.floor(totalPerPerson);
   }
 
   calcBtn.addEventListener("click", calculateTip);

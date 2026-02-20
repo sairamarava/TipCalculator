@@ -60,9 +60,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const totalPerPerson = (bill + totalTip) / people;
 
     // Update UI
-    tipPerPersonEl.textContent = formatCurrency(tipPerPerson);
+    tipPerPersonEl.textContent = formatCurrency(Math.floor(tipPerPerson));
     tipAmountEl.value = Math.floor(totalTip);
-    totalPerPersonEl.textContent = formatCurrency(totalPerPerson);
+    totalPerPersonEl.textContent = formatCurrency(Math.floor(totalPerPerson));
     shareAmountEl.value = Math.floor(totalPerPerson);
   }
 

@@ -2,133 +2,394 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Tip Calculator</title>
+  <meta name="description" content="Tippy is a sleek, modern tip calculator with a clean UI. Split bills, set custom tip %, and get instant totals—on any device." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='28' fill='%23222'/%3E%3Ctext x='50%' y='54%' text-anchor='middle' font-size='36' fill='white' font-family='Arial'%3E%25%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    
+:root{
+  /* Backgrounds */
+  --bg: #f3f4f7;            
+  --bg-soft: #ffffff;      
 
-  <!-- Fonts & Styles -->
-  
-  <link rel="stylesheet" href="style.css" crossoriginm/css2?familyt@300;400;600;700;800&display=swap
-  styles.css
+  /* Surfaces */
+  --card: rgba(13, 18, 32, 0.035); 
+  --card-stroke: rgba(210, 58, 142, 0.14); 
+
+  /* Typography */
+  --text: #1d1020;         
+  --muted: #7a4e66;         
+
+  /* Brand / Accents (magenta-plum family) */
+  --brand: #E63A9C;         
+  --brand-2: #5B0F46;      
+  --accent: #F3C7DC;       
+  --danger: #ff6b6b;
+
+  /* Effects */
+  --shadow: 0 10px 40px rgba(0,0,0,0.12);
+  --radius: 16px;
+  --radius-sm: 12px;
+  --radius-xs: 10px;
+  --outline: 2px solid rgba(230, 58, 156, 0.45);
+  --grid: 1200px;
+
+  /* --- Extra tokens that make the screenshot easy to reproduce --- */
+  --panel-top: #D33A8F;     
+  --panel-bottom: #4A0D3A;  
+  --input-stroke: #f1bfd7;  
+  --cta-bg: #f9e5ef;        
+  --cta-text: #C23386;      
+  --pill-bg: rgba(255,255,255,0.92); 
+  --pill-text: #C23386;    
+}
+
+   
+@media (prefers-color-scheme: light) {
+  :root{
+    --bg: #f3f4f7;
+    --bg-soft: #ffffff;
+    --card: rgba(13,18,32,0.035);
+    --card-stroke: rgba(210,58,142,0.14);
+    --text: #1d1020;
+    --muted: #7a4e66;
+    --shadow: 0 10px 30px rgba(16,24,40,0.08);
+  }
+}
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(1200px 600px at 80% -10%, rgba(111,139,255,0.20), transparent 55%),
+        radial-gradient(1000px 500px at 10% 10%, rgba(110,231,255,0.15), transparent 50%),
+        linear-gradient(180deg, var(--bg), var(--bg));
+    }
+    .container{max-width:var(--grid); margin-inline:auto; padding-inline:24px}
+    .nav{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:18px 0;
+    }
+    .brand{display:flex; align-items:center; gap:10px; text-decoration:none; color:inherit}
+    .logo{
+      width:36px; height:36px; border-radius:12px;
+      background: linear-gradient(135deg, var(--brand), var(--brand-2));
+      display:grid; place-items:center; color:#0b0d12; font-weight:800;
+      box-shadow: var(--shadow);
+    }
+    .brand span{font-weight:800; letter-spacing:.2px}
+    .nav-cta{
+      display:flex; gap:12px; align-items:center;
+    }
+    .btn{
+      appearance:none; border:none; cursor:pointer;
+      padding:10px 14px; border-radius:12px; font-weight:600;
+      display:inline-flex; align-items:center; gap:8px; text-decoration:none; color:var(--text);
+      background:var(--card); outline: none; border:1px solid var(--card-stroke);
+      transition: transform .15s ease, background .2s ease, border-color .2s ease, opacity .2s ease;
+    }
+    .btn:hover{transform: translateY(-1px)}
+    .btn:focus-visible{box-shadow: 0 0 0 4px rgba(110,231,255,0.25)}
+    .btn.primary{
+      background: linear-gradient(135deg, var(--brand), var(--accent));
+      color:#0b0d12; border-color: transparent;
+    }
+    .btn.ghost{background:transparent}
+    .theme-toggle{width:38px; height:38px; border-radius:10px; justify-content:center}
+
+    /* Hero */
+    .hero{padding:56px 0 24px}
+    .hero-grid{
+      display:grid; grid-template-columns: 1.1fr 0.9fr; gap:42px; align-items:center;
+    }
+    @media (max-width: 900px){
+      .hero-grid{grid-template-columns: 1fr; gap:28px}
+    }
+    .eyebrow{
+      display:inline-flex; gap:10px; align-items:center;
+      padding:6px 10px; border-radius:999px; font-size:12px; letter-spacing:.4px;
+      background:var(--card); border:1px solid var(--card-stroke); color:var(--muted)
+    }
+    .title{
+      font-family: "Plus Jakarta Sans", Inter, sans-serif;
+      font-weight:800; letter-spacing:-0.5px; line-height:1.05;
+      font-size: clamp(28px, 5.6vw, 56px); margin:14px 0;
+    }
+    .subtitle{
+      color:var(--muted); max-width: 54ch; font-size: clamp(14px, 2.2vw, 18px);
+    }
+    .hero-ctas{display:flex; gap:12px; flex-wrap:wrap; margin-top:18px}
+    .trust{
+      display:flex; gap:16px; align-items:center; color:var(--muted);
+      margin-top:22px; font-size:14px;
+    }
+    .avatars{
+      display:flex; align-items:center;
+    }
+    .avatar{
+      width:28px; height:28px; border-radius:50%; border:2px solid var(--bg-soft);
+      background: linear-gradient(135deg, var(--brand-2), var(--brand));
+      margin-left:-8px; box-shadow: var(--shadow)
+    }
+    .avatar:first-child{margin-left:0}
+
+    /* Preview card */
+    .preview{
+      position:relative; border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+      border:1px solid var(--card-stroke);
+      box-shadow: var(--shadow);
+      overflow:hidden; padding:22px;
+      backdrop-filter: blur(10px);
+      transform: translateZ(0);
+    }
+    .glow{
+      position:absolute; inset:-20% -20% auto auto; width:60%; height:60%;
+      background: radial-gradient(circle at 70% 0%, rgba(110,231,255,0.35), transparent 60%);
+      pointer-events:none; filter: blur(18px);
+    }
+    .calc-shell{
+      background: var(--bg-soft); border: 1px solid var(--card-stroke);
+      border-radius: 16px; padding:16px; display:grid; gap:14px;
+    }
+    .calc-row{display:grid; grid-template-columns: 1fr 1fr; gap:10px}
+    .field{
+      display:grid; gap:6px; font-size:13px; color:var(--muted)
+    }
+    .input{
+      padding:12px 12px; border-radius:10px; border:1px solid var(--card-stroke);
+      background:var(--card); color:var(--text); font-size:14px; outline:none;
+      transition: border-color .2s ease, background .2s ease;
+    }
+    .input:focus{border-color: rgba(110,231,255,0.6)}
+    .chip-row{display:flex; gap:8px; flex-wrap:wrap}
+    .chip{
+      padding:8px 12px; border-radius:999px; border:1px solid var(--card-stroke);
+      background:transparent; color:var(--text); font-weight:600; font-size:13px;
+      cursor:pointer; transition: all .15s ease;
+    }
+    .chip.active, .chip:hover{background: linear-gradient(135deg, var(--brand), var(--accent)); color:#0b0d12; border-color:transparent}
+    .totals{
+      display:grid; grid-template-columns: 1fr auto; gap:10px; align-items:center;
+      padding:12px; border-radius:12px; background: linear-gradient(180deg, rgba(110,231,255,0.12), rgba(167,139,250,0.10));
+      border:1px solid rgba(110,231,255,0.35);
+      font-weight:700
+    }
+    .label-sm{color:var(--muted); font-weight:600; font-size:12px}
+
+    /* Features */
+    .section{padding:64px 0}
+    .section h2{
+      font-size: clamp(22px, 4.2vw, 34px);
+      margin:0 0 8px 0;
+      font-family: "Plus Jakarta Sans", Inter, sans-serif;
+    }
+    .kicker{color:var(--muted); margin-bottom:28px}
+    .features{
+      display:grid; grid-template-columns: repeat(3,1fr); gap:18px;
+    }
+    @media (max-width: 900px){.features{grid-template-columns:1fr}}
+    .card{
+      background: var(--card); border:1px solid var(--card-stroke);
+      border-radius: var(--radius-sm); padding:20px; display:grid; gap:10px;
+      box-shadow: var(--shadow);
+    }
+    .icon{
+      width:36px; height:36px; border-radius:10px; display:grid; place-items:center; font-weight:800;
+      background: linear-gradient(135deg, var(--brand-2), var(--brand)); color:#0b0d12;
+    }
+
+    /* Testimonials */
+    .testimonials{
+      display:grid; grid-template-columns: repeat(3,1fr); gap:18px;
+    }
+    @media (max-width: 900px){.testimonials{grid-template-columns:1fr}}
+    .quote{font-size:15px; color:var(--muted)}
+    .person{display:flex; align-items:center; gap:10px; margin-top:12px}
+    .pill{
+      font-size:12px; color:var(--muted); padding:6px 10px; border-radius:999px;
+      border:1px dashed var(--card-stroke)
+    }
+
+    /* FAQ */
+    .faq{display:grid; gap:10px}
+    .faq details{
+      background: var(--card); border:1px solid var(--card-stroke);
+      border-radius: var(--radius-xs); padding:14px 16px;
+    }
+    .faq summary{cursor:pointer; font-weight:700}
+    .faq p{color:var(--muted)}
+
+    /* Footer */
+    footer{
+      padding:40px 0; border-top:1px solid var(--card-stroke); margin-top:32px;
+    }
+    .foot-grid{
+      display:grid; grid-template-columns: 1fr auto; gap:18px; align-items:center;
+    }
+    @media (max-width: 700px){.foot-grid{grid-template-columns:1fr; text-align:center}}
+    .links, .social{display:flex; gap:14px; flex-wrap:wrap}
+    .link{color:var(--muted); text-decoration:none}
+    .link:hover{color:var(--text)}
+
+    /* Modal */
+    .modal{
+      position:fixed; inset:0; background: rgba(3,6,12,0.6);
+      display:none; align-items:center; justify-content:center; padding:24px;
+      z-index: 50;
+    }
+    .modal.open{display:flex}
+    .modal-card{
+      width:min(560px, 96vw); background: var(--bg-soft);
+      border:1px solid var(--card-stroke); border-radius:18px; padding:18px;
+      box-shadow: var(--shadow)
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      .btn, .chip, .input, .card, .preview, .calc-shell, .totals { transition: none !important; }
+    }
+  </style>
 </head>
 <body>
-  <main class="app">
-    <!-- LEFT: Inputs -->
-    <section class="panel panel--left" role="form" aria-labelledby="formTitle">
-      <h1 id="formTitle" class="visually-hidden">Tip Calculator</h1>
+  <!-- Navigation -->
+  <nav class="container nav" aria-label="Primary">
+    <a class="brand" href="#" aria-label="Tippy Home">
+      <div class="logo" aria-hidden="true">%</div>
+      <span>Tip Calculator</span>
+    </a>
+    <div class="nav-cta">
+      <button class="btn theme-toggle" id="themeToggle" aria-label="Toggle theme">🌓</button>
+      <a class="btn ghost" href="#features">Features</a>
+      <button class="btn primary"  onclick="window.location.href='/calculator.html'">Try the Calculator</button>
+    </div>
+  </nav>
 
-      <!-- Bill Amount -->
-      <div class="block">
-        <label for="bill" class="label">BILL AMOUNT</label>
-        <div class="pill pill--wide">
-          <span class="prefix">₹</span>
-          <input
-            id="bill"
-            class="pill__value"
-            type="text"
-            inputmode="decimal"
-            placeholder="0.00"
-            aria-describedby="billHelp"
-          />
+  <!-- Hero -->
+  <header class="container hero">
+    <div class="hero-grid">
+      <div>
+        <span class="eyebrow">No more mental math • Split bills in seconds</span>
+        <h1 class="title">Effortless tipping with a <span style="background:linear-gradient(135deg,var(--brand),var(--brand-2)); -webkit-background-clip:text; background-clip:text; color:transparent">sleek</span>, <span style="background:linear-gradient(135deg,var(--accent),var(--brand)); -webkit-background-clip:text; background-clip:text; color:transparent">modern</span> calculator.</h1>
+        <p class="subtitle">Enter your bill, pick a tip, split if you like—Tippy gives you instant totals with a clean, distraction‑free UI. Perfect for dinners, deliveries, and group outings.</p>
+        <div class="hero-ctas">
+          <button class="btn primary"  onclick="window.location.href='/calculator.html'">Open Tip Calculator</button>
+          <a class="btn" href="#faq">Learn more</a>
         </div>
-        <small id="billHelp" class="muted" aria-live="polite"></small>
-      </div>
-
-      <!-- Service Rating (1–10) -->
-      <div class="block">
-        <label for="service" class="label">SERVICE RATING (1–10)</label>
-        <div class="pill">
-          <span aria-hidden="true"></span>
-          <div class="pill__value pill__value--center rating-wrap">
-            <select id="service" aria-label="Service rating from 1 to 10" class="rating-select">
-              <option value="1">1 (Poor)</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-              <option value="5" selected>5 (Okay)</option>
-              <option value="6">6</option>
-              <option value="7">7</option>
-              <option value="8">8</option>
-              <option value="9">9</option>
-              <option value="10">10 (Excellent)</option>
-            </select>
-            <span class="muted tip-hint"></span>
+        <div class="trust">
+          <div class="avatars" aria-hidden="true">
+            <div class="avatar"></div><div class="avatar"></div><div class="avatar"></div><div class="avatar"></div>
           </div>
-          <span aria-hidden="true"></span>
+          <div>Trusted by <strong>20k+</strong> neat freaks &amp; number nerds</div>
         </div>
       </div>
 
-      <!-- Number of People -->
-      <div class="block">
-        <label for="people" class="label">NUMBER OF PEOPLE</label>
-        <div class="pill pill--wide">
-          <span aria-hidden="true"></span>
-          <input
-            id="people"
-            class="pill__value"
-            type="text"
-            inputmode="numeric"
-            placeholder="1"
-            aria-describedby="peopleHelp"
-          />
-        </div>
-        <small id="peopleHelp" class="muted" aria-live="polite"></small>
-      </div>
-
-      <!-- Calculate button -->
-      <div class="block" style="margin-top:4px;">
-        <div class="pill" style="grid-template-columns: 1fr;">
-          <button id="calcBtn" class="btn" type="button" style="height:46px;font-size:1rem;font-weight:700;">
-            CALCULATE
-          </button>
+      <!-- Preview Card (Mini Calculator) -->
+      <div class="preview" aria-label="Calculator preview">
+        <div class="glow" aria-hidden="true"></div>
+        <div class="calc-shell" role="region" aria-label="Tip calculator quick preview">
+          <img src="/src/image.png" alt="Website image" style="height: 250px;">
         </div>
       </div>
+    </div>
+  </header>
 
-    </section>
+  <!-- Features -->
+  <section id="features" class="container section">
+    <h2>Designed for clarity. Built for speed.</h2>
+    <p class="kicker">Everything you need to get from bill to pay-in-3-taps.</p>
+    <div class="features">
+      <div class="card">
+        <div class="icon">⚡</div>
+        <h3>Instant math</h3>
+        <p>Real-time calculations as you type. No lag, no clutter—just the numbers you care about.</p>
+      </div>
+      <div class="card">
+        <div class="icon">🎯</div>
+        <h3>Smart presets</h3>
+        <p>One-tap tips (10/15/18/20) with custom % support. Add tax and split fairly with ease.</p>
+      </div>
+      <div class="card">
+        <div class="icon">🌓</div>
+        <h3>Light & dark</h3>
+        <p>Looks gorgeous in any environment. Auto theme + manual toggle built in.</p>
+      </div>
+    </div>
+  </section>
 
-    <!-- RIGHT: Results -->
-    <section class="panel panel--right" aria-live="polite">
-      <div class="right-grid">
-        <!-- Top card: Tip per person + total tip text box -->
-        <div class="card card--light">
-          <div class="card__header">
-            <h3 class="title">TIP</h3>
-            <span class="subtitle">Per Person</span>
-          </div>
-          <div class="amount" id="tipPerPerson">₹0.00</div>
-
-          <p class="helper">
-           
-          </p>
-
-          <div class="result-row">
-            <label for="tipAmount" class="result-label">TIP AMOUNT (TOTAL)</label>
-            <div class="pill pill--wide result-pill">
-              <span class="prefix">₹</span>
-              <input id="tipAmount" class="pill__value" type="text" readonly value="0.00" />
-            </div>
-          </div>
-        </div>
-
-        <!-- Bottom card: Total per person + per-person share text box -->
-        <div class="card card--dark">
-          <div class="card__header">
-            <h3 class="title">TOTAL</h3>
-            <span class="subtitle">Per Person</span>
-          </div>
-          <div class="amount" id="totalPerPerson">₹0.00</div>
-
-          <div class="result-row">
-            <label for="shareAmount" class="result-label">PER‑PERSON SHARE</label>
-            <div class="pill pill--wide result-pill">
-              <span class="prefix">₹</span>
-              <input id="shareAmount" class="pill__value" type="text" readonly value="0.00" />
-            </div>
-          </div>
+  <!-- Testimonials -->
+  <section class="container section" aria-labelledby="testi">
+    <h2 id="testi">Loved by people who like tidy totals</h2>
+    <p class="kicker">Minimal UI, maximal clarity.</p>
+    <div class="testimonials">
+      <div class="card">
+        <div class="pill">Restaurant nights</div>
+        <p class="quote">“Finally a tip calculator that feels modern. Two taps and everyone knows what to pay.”</p>
+        <div class="person">
+          <div class="avatar" aria-hidden="true"></div>
+          <div><strong>Sana</strong><div class="label-sm">Product designer</div></div>
         </div>
       </div>
-    </section>
-  </main>
-  <script src="/index.js"></script>
+      <div class="card">
+        <div class="pill">Teams & friends</div>
+        <p class="quote">“The split per person is instant—even with tax. Cleanest interface I’ve used.”</p>
+        <div class="person">
+          <div class="avatar" aria-hidden="true"></div>
+          <div><strong>Rahul</strong><div class="label-sm">Engineer</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="pill">Everyday use</div>
+        <p class="quote">“No ads, no noise. Just the numbers. Tippy lives on my homescreen.”</p>
+        <div class="person">
+          <div class="avatar" aria-hidden="true"></div>
+          <div><strong>Emily</strong><div class="label-sm">Freelancer</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="container section">
+    <h2>Questions, answered</h2>
+    <div class="faq">
+      <details>
+        <summary>Do you tip on the bill before or after tax?</summary>
+        <p>Tippy lets you add tax as a separate input. You can choose to tip on pre‑tax or after‑tax by entering tax and adjusting your preference.</p>
+      </details>
+      <details>
+        <summary>Can I set custom tip presets?</summary>
+        <p>Yes. In the app build, you can long‑press any chip to customize your default presets.</p>
+      </details>
+      <details>
+        <summary>Does it work offline?</summary>
+        <p>The calculator works fully offline in your browser. Consider saving it as a PWA for instant access.</p>
+      </details>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container foot-grid">
+      <div class="links">
+        <a class="link" href="#">Privacy</a>
+        <a class="link" href="#">Terms</a>
+        <a class="link" href="#">Support</a>
+      </div>
+      <div class="social">
+        <a class="link" href="#" aria-label="Twitter">X</a>
+        <a class="link" href="#" aria-label="GitHub">GitHub</a>
+        <a class="link" href="#" aria-label="Email">Email</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Modal: Full Calculator Demo -->
 </body>
 </html>
-``

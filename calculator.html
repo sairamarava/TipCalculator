@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Tip Calculator</title>
+
+  <!-- Fonts & Styles -->
+  
+  <link rel="stylesheet" href="style.css" crossoriginm/css2?familyt@300;400;600;700;800&display=swap
+  styles.css
+</head>
+<body>
+  <main class="app">
+    <!-- LEFT: Inputs -->
+    <section class="panel panel--left" role="form" aria-labelledby="formTitle">
+      <h1 id="formTitle" class="visually-hidden">Tip Calculator</h1>
+
+      <!-- Bill Amount -->
+      <div class="block">
+        <label for="bill" class="label">BILL AMOUNT</label>
+        <div class="pill pill--wide">
+          <span class="prefix">₹</span>
+          <input
+            id="bill"
+            class="pill__value"
+            type="text"
+            inputmode="decimal"
+            placeholder="0.00"
+            aria-describedby="billHelp"
+          />
+        </div>
+        <small id="billHelp" class="muted" aria-live="polite"></small>
+      </div>
+
+      <!-- Service Rating (1–10) -->
+      <div class="block">
+        <label for="service" class="label">SERVICE RATING (1–10)</label>
+        <div class="pill">
+          <span aria-hidden="true"></span>
+          <div class="pill__value pill__value--center rating-wrap">
+            <select id="service" aria-label="Service rating from 1 to 10" class="rating-select">
+              <option value="1">1 (Poor)</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5" selected>5 (Okay)</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10 (Excellent)</option>
+            </select>
+            <span class="muted tip-hint"></span>
+          </div>
+          <span aria-hidden="true"></span>
+        </div>
+      </div>
+
+      <!-- Number of People -->
+      <div class="block">
+        <label for="people" class="label">NUMBER OF PEOPLE</label>
+        <div class="pill pill--wide">
+          <span aria-hidden="true"></span>
+          <input
+            id="people"
+            class="pill__value"
+            type="text"
+            inputmode="numeric"
+            placeholder="1"
+            aria-describedby="peopleHelp"
+          />
+        </div>
+        <small id="peopleHelp" class="muted" aria-live="polite"></small>
+      </div>
+
+      <!-- Calculate button -->
+      <div class="block" style="margin-top:4px;">
+        <div class="pill" style="grid-template-columns: 1fr;">
+          <button id="calcBtn" class="btn" type="button" style="height:46px;font-size:1rem;font-weight:700;">
+            CALCULATE
+          </button>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- RIGHT: Results -->
+    <section class="panel panel--right" aria-live="polite">
+      <div class="right-grid">
+        <!-- Top card: Tip per person + total tip text box -->
+        <div class="card card--light">
+          <div class="card__header">
+            <h3 class="title">TIP</h3>
+            <span class="subtitle">Per Person</span>
+          </div>
+          <div class="amount" id="tipPerPerson">₹0.00</div>
+
+          <p class="helper">
+           
+          </p>
+
+          <div class="result-row">
+            <label for="tipAmount" class="result-label">TIP AMOUNT (TOTAL)</label>
+            <div class="pill pill--wide result-pill">
+              <span class="prefix">₹</span>
+              <input id="tipAmount" class="pill__value" type="text" readonly value="0.00" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom card: Total per person + per-person share text box -->
+        <div class="card card--dark">
+          <div class="card__header">
+            <h3 class="title">TOTAL</h3>
+            <span class="subtitle">Per Person</span>
+          </div>
+          <div class="amount" id="totalPerPerson">₹0.00</div>
+
+          <div class="result-row">
+            <label for="shareAmount" class="result-label">PER‑PERSON SHARE</label>
+            <div class="pill pill--wide result-pill">
+              <span class="prefix">₹</span>
+              <input id="shareAmount" class="pill__value" type="text" readonly value="0.00" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <script src="/index.js"></script>
+</body>
+</html>
+``
